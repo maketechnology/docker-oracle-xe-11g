@@ -26,12 +26,16 @@ ENV ORACLE_SID=XE
 
 EXPOSE 1521
 EXPOSE 8080
-VOLUME ["/u01/app/oracle"]
+#VOLUME ["/u01/app/oracle"]
+RUN mkdir -p /u01/app/oracle
 
 ENV processes 500
 ENV sessions 555
 ENV transactions 610
 
 ADD entrypoint.sh /
+
+RUN /entrypoint.sh
+
 ENTRYPOINT ["/entrypoint.sh"]
 CMD [""]
