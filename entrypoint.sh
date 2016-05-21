@@ -54,10 +54,10 @@ case "$1" in
 		##
 		## Workaround for graceful shutdown. ....ing oracle... ‿( ́ ̵ _-`)‿
 		##
-		while [ "$END" == '' ]; do
-			sleep 1
-			trap "/etc/init.d/oracle-xe stop && END=1" INT TERM
-		done
+		#while [ "$END" == '' ]; do
+		#	sleep 1
+		#	trap "/etc/init.d/oracle-xe stop && END=1" INT TERM
+		#done
 		;;
 
 	*)
