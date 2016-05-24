@@ -12,9 +12,8 @@ echo "export PATH=\$ORACLE_HOME/bin:\$PATH" >> /etc/profile.d/oracle-xe.sh
 echo "export ORACLE_SID=XE" >> /etc/profile.d/oracle-xe.sh
 . /etc/profile
 
-case "$1" in
-	'')
-		#Check for mounted database files
+checkInstall() {
+	#Check for mounted database files
 		if [ "$(ls -A /u01/app/oracle/oradata)" ]; then
 			echo "found files in /u01/app/oracle/oradata Using them instead of initial database"
 			echo "XE:$ORACLE_HOME:N" >> /etc/oratab
@@ -47,6 +46,11 @@ case "$1" in
 
 			echo "Database initialized. Please visit http://#containeer:8080/apex to proceed with configuration"
 		fi
+}
+
+case "$1" in
+	'')
+		checkInstall
 
 		/etc/init.d/oracle-xe start
 		echo "Database ready to use. Enjoy! ;)"
@@ -54,12 +58,16 @@ case "$1" in
 		##
 		## Workaround for graceful shutdown. ....ing oracle... ‿( ́ ̵ _-`)‿
 		##
-		#while [ "$END" == '' ]; do
-		#	sleep 1
-		#	trap "/etc/init.d/oracle-xe stop && END=1" INT TERM
-		#done
+		while [ "$END" == '' ]; do
+			sleep 1
+			trap "/etc/init.d/oracle-xe stop && END=1" INT TERM
+		done
 		;;
+	'setup')
+		checkInstall
 
+		echo "Database ready to use. Enjoy! ;)"
+		;;
 	*)
 		echo "Database is not configured. Please run /etc/init.d/oracle-xe configure if needed."
 		exec "$@"
